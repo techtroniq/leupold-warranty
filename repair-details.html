@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Detailed view of your Leupold warranty repair request.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repair Details - Leupold Warranty Repair Center</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      color: #333;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #1A1A1A;
+      color: #FFFFFF;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    nav {
+      background-color: #2A2A2A;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    nav a {
+      color: #C4A052;
+      text-decoration: none;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+      color: #FFFFFF;
+    }
+    .content {
+      padding: 20px;
+      background: #FFFFFF;
+      border-radius: 5px;
+      border-left: 5px solid #C4A052;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #2A2A2A;
+      color: #FFFFFF;
+      padding: 10px;
+      text-align: left;
+    }
+    td {
+      padding: 10px;
+    }
+    .btn {
+      background-color: #C4A052;
+      color: #1A1A1A;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+    }
+    .btn:hover {
+      background-color: #D4AF37;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.svg" alt="Leupold Logo" height="40">
+    <h1>Repair Details</h1>
+  </header>
+  
+  <nav>
+    <a href="index.html">My Repairs</a>
+    <a href="https://www.leupold.com/products" target="_blank">Products</a>
+    <a href="https://www.leupold.com/support" target="_blank">Support</a>
+  </nav>
+  
+  <div class="content">
+    <h2>Repair Request Details</h2>
+    <div id="repair-details-container">
+      <!-- Repair details will be dynamically loaded here -->
+    </div>
+    <a href="index.html" class="btn">Back to My Repairs</a>
+  </div>
+  
+  <footer>
+    <p>&copy; 2025 Leupold & Stevens, Inc. All rights reserved.</p>
+  </footer>
+  
+  <script>
+    // Get repair id from URL query parameters
+    const params = new URLSearchParams(window.location.search);
+    const repairId = params.get('id');
+
+    // Function to display the repair details
+    function displayRepairDetails() {
+      const repairs = JSON.parse(localStorage.getItem('leupoldRepairs')) || [];
+      const repair = repairs.find(r => r.id === repairId);
+      const container = document.getElementById('repair-details-container');
+
+      if (!repair) {
+        container.innerHTML = '<p>Repair request not found.</p>';
+        return;
+      }
+
+      // Create a table to display all repair data
+      let detailsHtml = '<table>';
+      for (const key in repair) {
+        detailsHtml += `
+          <tr>
+            <th>${key}</th>
+            <td>${repair[key]}</td>
+          </tr>`;
+      }
+      detailsHtml += '</table>';
+
+      container.innerHTML = detailsHtml;
+    }
+
+    // Load the repair details on page load
+    window.addEventListener('load', displayRepairDetails);
+  </script>
+</body>
+</html>

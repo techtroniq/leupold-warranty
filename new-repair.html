@@ -1,289 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Repair Request - Leupold Warranty Center</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-            color: #333;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #1A1A1A;
-            color: #FFFFFF;
-            padding: 1rem;
-            text-align: center;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        nav {
-            background-color: #2A2A2A;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        nav a {
-            color: #C4A052;
-            text-decoration: none;
-            margin-right: 15px;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-            color: #FFFFFF;
-        }
-        .content {
-            padding: 20px;
-            background: #FFFFFF;
-            border-radius: 5px;
-            border-left: 5px solid #C4A052;
-        }
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            color: #FFFFFF;
-            font-size: 0.8rem;
-            padding: 10px;
-            background-color: #1A1A1A;
-            border-radius: 5px;
-        }
-        .btn {
-            background-color: #C4A052;
-            color: #1A1A1A;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-            margin-right: 10px;
-        }
-        .btn:hover {
-            background-color: #D4AF37;
-        }
-        .btn-secondary {
-            background-color: #2A2A2A;
-            color: #FFFFFF;
-        }
-        .btn-secondary:hover {
-            background-color: #444;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        textarea {
-            height: 120px;
-        }
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .form-col {
-            flex: 1;
-        }
-        .required {
-            color: #F44336;
-        }
-        .error-message {
-            color: #F44336;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-        .success-message {
-            background-color: #DFF2BF;
-            color: #4F8A10;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="description" content="Submit your Leupold repair request. Provide product details and contact information.">
+  <meta name="keywords" content="Leupold, warranty, repair, repair request">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Repair Request - Leupold Warranty Center</title>
+  <style>
+    /* Base styling */
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      color: #333;
+      background-color: #f4f4f4;
+    }
+    header, nav, main, footer {
+      margin-bottom: 20px;
+    }
+    header {
+      background-color: #1A1A1A;
+      color: #FFFFFF;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 5px;
+    }
+    nav {
+      background-color: #2A2A2A;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    nav a {
+      color: #C4A052;
+      text-decoration: none;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    nav a:hover,
+    nav a.active {
+      text-decoration: underline;
+      color: #FFFFFF;
+    }
+    main {
+      background: #FFFFFF;
+      padding: 20px;
+      border-radius: 5px;
+      border-left: 5px solid #C4A052;
+    }
+    footer {
+      background-color: #1A1A1A;
+      color: #FFFFFF;
+      font-size: 0.8rem;
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+    }
+    /* Button styles */
+    .btn {
+      background-color: #C4A052;
+      color: #1A1A1A;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .btn:hover {
+      background-color: #D4AF37;
+    }
+    .btn-secondary {
+      background-color: #2A2A2A;
+      color: #FFFFFF;
+    }
+    .btn-secondary:hover {
+      background-color: #444;
+    }
+    /* Form styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    textarea {
+      height: 120px;
+    }
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .form-col {
+      flex: 1;
+      min-width: 200px;
+    }
+    .required {
+      color: #F44336;
+    }
+    .error-message {
+      color: #F44336;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+    .success-message {
+      background-color: #DFF2BF;
+      color: #4F8A10;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    /* Transitions for toggled sections */
+    #product-specific-fields {
+      transition: all 0.3s ease;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <img src="logo.svg" alt="Leupold Logo" height="40">
-        <h1>Warranty Repair Center</h1>
-    </header>
+  <header>
+    <img src="logo.svg" alt="Leupold Logo" height="40">
+    <h1>Warranty Repair Center</h1>
+  </header>
+  
+  <nav role="navigation">
+    <a href="index.html" class="active">My Repairs</a>
+    <a href="https://www.leupold.com/products" target="_blank">Products</a>
+    <a href="https://www.leupold.com/support" target="_blank">Support</a>
+  </nav>
+  
+  <main>
+    <h2 id="new-repair-heading">New Repair Request</h2>
+    <p>Please provide your contact information and details about your Leupold product. Fields marked with an <span class="required">*</span> are required.</p>
     
-    <nav>
-        <a href="index.html">My Repairs</a>
-        <a href="https://www.leupold.com/products" target="_blank">Products</a>
-        <a href="https://www.leupold.com/support" target="_blank">Support</a>
-    </nav>
-    
-    <div class="content">
-        <h2>New Repair Request</h2>
-        <p>Please provide the details of your Leupold product and the issue you're experiencing. Fields marked with an <span class="required">*</span> are required.</p>
-        
-        <div id="success-message" class="success-message">
-            Your repair request has been submitted successfully! Redirecting to your repair list...
-        </div>
-        
-        <form id="repair-form">
-            <div class="form-row">
-                <div class="form-col">
-                    <div class="form-group">
-                        <label for="product">Product Name <span class="required">*</span></label>
-                        <input type="text" id="product" name="product" required placeholder="e.g. VX-5HD 3-15x44mm">
-                        <div id="product-error" class="error-message">Please enter the product name</div>
-                    </div>
-                </div>
-                <div class="form-col">
-                    <div class="form-group">
-                        <label for="serialNumber">Serial Number <span class="required">*</span></label>
-                        <input type="text" id="serialNumber" name="serialNumber" required placeholder="e.g. L123456">
-                        <div id="serialNumber-error" class="error-message">Please enter a valid serial number</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="productType">Product Type</label>
-                <select id="productType" name="productType">
-                    <option value="">Select Product Type</option>
-                    <option value="Rifle Scope">Rifle Scope</option>
-                    <option value="Spotting Scope">Spotting Scope</option>
-                    <option value="Binocular">Binocular</option>
-                    <option value="Rangefinder">Rangefinder</option>
-                    <option value="Red Dot">Red Dot</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="purchaseDate">Purchase Date (approximate)</label>
-                <input type="date" id="purchaseDate" name="purchaseDate">
-            </div>
-            
-            <div class="form-group">
-                <label for="issue">Describe the Issue <span class="required">*</span></label>
-                <textarea id="issue" name="issue" required placeholder="Please describe the problem you're experiencing in detail..."></textarea>
-                <div id="issue-error" class="error-message">Please describe the issue</div>
-            </div>
-            
-            <div class="form-group">
-                <button type="submit" class="btn">Submit Repair Request</button>
-                <a href="index.html" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+    <div id="success-message" class="success-message">
+      Your repair request has been submitted successfully! Redirecting to your repair list...
     </div>
     
-    <footer>
-        <p>&copy; 2025 Leupold & Stevens, Inc. All rights reserved.</p>
-    </footer>
+    <form id="repair-form" role="form" novalidate>
+      <!-- Contact Information Section -->
+      <section aria-labelledby="contact-info-heading">
+        <h3 id="contact-info-heading">Contact Information</h3>
+        <div class="form-row">
+          <div class="form-col">
+            <div class="form-group">
+              <label for="returnName">Return Name <span class="required">*</span></label>
+              <input type="text" id="returnName" name="returnName" required placeholder="Full Name" autocomplete="name">
+              <div id="returnName-error" class="error-message">Please enter your name</div>
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label for="email">Email Address <span class="required">*</span></label>
+              <input type="email" id="email" name="email" required placeholder="email@example.com" autocomplete="email">
+              <div id="email-error" class="error-message">Please enter a valid email address</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-col">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="(XXX) XXX-XXXX" autocomplete="tel">
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label for="address">Return Address <span class="required">*</span></label>
+              <input type="text" id="address" name="address" required placeholder="Street Address" autocomplete="street-address">
+              <div id="address-error" class="error-message">Please enter your address</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-col">
+            <div class="form-group">
+              <label for="city">City <span class="required">*</span></label>
+              <input type="text" id="city" name="city" required placeholder="City" autocomplete="address-level2">
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label for="state">State/Province <span class="required">*</span></label>
+              <input type="text" id="state" name="state" required placeholder="State/Province" autocomplete="address-level1">
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label for="zipCode">Zip/Postal Code <span class="required">*</span></label>
+              <input type="text" id="zipCode" name="zipCode" required placeholder="Zip/Postal Code" autocomplete="postal-code">
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Product Information Section -->
+      <section aria-labelledby="product-info-heading">
+        <h3 id="product-info-heading">Product Information</h3>
+        <div class="form-group">
+          <label for="productType">Product Type <span class="required">*</span></label>
+          <select id="productType" name="productType" required>
+            <option value="">Select Product Type</option>
+            <option value="Rifle Scope">Rifle Scope</option>
+            <option value="Spotting Scope">Spotting Scope</option>
+            <option value="Binocular">Binocular</option>
+            <option value="Rangefinder">Rangefinder</option>
+            <option value="Red Dot">Red Dot</option>
+            <option value="Eyewear">Eyewear</option>
+            <option value="Mounts & Accessories">Mounts & Accessories</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="product-specific-fields" style="display: none;">
+          <!-- Common fields for all product types -->
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="product">Product Name <span class="required">*</span></label>
+                <input type="text" id="product" name="product" required placeholder="e.g. VX-5HD 3-15x44mm">
+                <div id="product-error" class="error-message">Please enter the product name</div>
+              </div>
+            </div>
+            <div class="form-col" id="serialNumberContainer">
+              <div class="form-group">
+                <label for="serialNumber">Serial Number <span class="required">*</span></label>
+                <input type="text" id="serialNumber" name="serialNumber" required placeholder="e.g. L123456">
+                <div id="serialNumber-error" class="error-message">Please enter a valid serial number</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="purchaseDate">Purchase Date (approximate)</label>
+            <input type="date" id="purchaseDate" name="purchaseDate">
+          </div>
+          
+          <!-- Product-specific sections (e.g., Rifle Scope fields, Rangefinder fields, etc.) -->
+          <div id="rifle-scope-fields" class="product-fields" style="display: none;">
+            <!-- Rifle Scope specific fields go here -->
+          </div>
+          <div id="rangefinder-fields" class="product-fields" style="display: none;">
+            <!-- Rangefinder specific fields go here -->
+          </div>
+          
+          <!-- Replacement Approval Section -->
+          <div id="replacement-approval" style="display: none; margin: 20px 0; padding: 15px; background-color: #f9f9f9; border-left: 3px solid #C4A052; border-radius: 5px;">
+            <p style="margin-bottom: 15px; line-height: 1.5; color: #333;">
+              <strong>Replacement Approval:</strong> By selecting "Yes" below, you authorize us to send you a replacement product without first contacting you. Please review the following details:
+            </p>
+            <ul style="margin-left: 20px; margin-bottom: 15px; color: #333;">
+              <li>The replacement will be a new or refurbished product that meets or exceeds the performance of the original.</li>
+              <li>The finish, color, or pattern of the replacement may differ from your original product.</li>
+              <li>The original product will be disposed of by Leupold &amp; Stevens and will not be returned.</li>
+            </ul>
+            <p style="margin-bottom: 15px; line-height: 1.5; color: #333;">
+              Do you approve this replacement process?
+            </p>
+            <div style="margin-top: 10px;">
+              <div style="margin-bottom: 10px;">
+                <input type="radio" id="approve-yes" name="approveReplacement" value="Yes" style="margin-right: 8px;">
+                <label for="approve-yes">Yes</label>
+              </div>
+              <div>
+                <input type="radio" id="approve-no" name="approveReplacement" value="No" style="margin-right: 8px;">
+                <label for="approve-no">No</label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Additional product issues sections (e.g., Rifle Scope issues, Spotting Scope issues, etc.) -->
+          <div id="rifle-scope-issues" class="product-issues" style="display: none; margin-bottom: 20px; padding: 15px; background-color: #fbfbfb; border-radius: 5px;">
+            <!-- Rifle Scope issues checkboxes go here -->
+          </div>
+          <!-- Other product issue sections can follow a similar pattern -->
+          
+          <!-- Issue Description Field -->
+          <div class="form-group">
+            <label for="issue">Describe the Issue <span class="required">*</span></label>
+            <textarea id="issue" name="issue" required placeholder="Please describe the problem you're experiencing in detail..."></textarea>
+            <div id="issue-error" class="error-message">Please describe the issue</div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Form Actions (always visible) -->
+      <div class="form-group">
+        <button type="submit" class="btn" id="submitBtn">Submit Repair Request</button>
+        <a href="index.html" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </main>
+  
+  <footer>
+    <p>&copy; 2025 Leupold & Stevens, Inc. All rights reserved.</p>
+  </footer>
+  
+  <script>
+    // Utility: attach real-time validation to clear error messages
+    function attachRealTimeValidation(id, errorId) {
+      document.getElementById(id).addEventListener('input', function() {
+        if (this.value.trim() !== '') {
+          document.getElementById(errorId).style.display = 'none';
+        }
+      });
+    }
+    attachRealTimeValidation('returnName', 'returnName-error');
+    attachRealTimeValidation('email', 'email-error');
+    attachRealTimeValidation('address', 'address-error');
+    attachRealTimeValidation('product', 'product-error');
+    attachRealTimeValidation('serialNumber', 'serialNumber-error');
+    attachRealTimeValidation('issue', 'issue-error');
 
-    <script>
-        // Function to generate a unique ID for the repair request
-        function generateRepairId() {
-            return 'R' + Date.now().toString().slice(-6);
+    // Update product name placeholder based on product type
+    function updateProductNamePlaceholder(productType) {
+      const productInput = document.getElementById('product');
+      switch(productType) {
+        case 'Rifle Scope':
+          productInput.placeholder = 'e.g. VX-5HD 3-15x44mm';
+          break;
+        case 'Spotting Scope':
+          productInput.placeholder = 'e.g. SX-4 Pro Guide HD 15-45x65mm';
+          break;
+        case 'Binocular':
+          productInput.placeholder = 'e.g. BX-4 Pro Guide HD 10x42mm';
+          break;
+        case 'Rangefinder':
+          productInput.placeholder = 'e.g. RX-1400i TBR';
+          break;
+        case 'Red Dot':
+          productInput.placeholder = 'e.g. Freedom RDS 1x34';
+          break;
+        case 'Eyewear':
+          productInput.placeholder = 'e.g. Packout Polarized';
+          break;
+        case 'Mounts & Accessories':
+          productInput.placeholder = 'e.g. STD Rings 30mm High';
+          break;
+        default:
+          productInput.placeholder = 'e.g. Enter product name';
+      }
+    }
+
+    // Show/hide fields based on product type selection
+    function toggleProductFields() {
+      const productType = document.getElementById('productType').value;
+      const productSpecificFields = document.getElementById('product-specific-fields');
+      updateProductNamePlaceholder(productType);
+      
+      // Hide all product-specific field sections and issues
+      document.querySelectorAll('.product-fields').forEach(field => field.style.display = 'none');
+      document.querySelectorAll('.product-issues').forEach(issue => issue.style.display = 'none');
+      
+      if (productType) {
+        productSpecificFields.style.display = 'block';
+        switch(productType) {
+          case 'Rifle Scope':
+            document.getElementById('rifle-scope-fields').style.display = 'block';
+            document.getElementById('rifle-scope-issues').style.display = 'block';
+            document.getElementById('replacement-approval').style.display = 'block';
+            break;
+          case 'Spotting Scope':
+            document.getElementById('replacement-approval').style.display = 'block';
+            break;
+          case 'Binocular':
+            document.getElementById('replacement-approval').style.display = 'block';
+            break;
+          case 'Rangefinder':
+            document.getElementById('rangefinder-fields').style.display = 'block';
+            document.getElementById('replacement-approval').style.display = 'block';
+            break;
+          case 'Eyewear':
+            document.getElementById('replacement-approval').style.display = 'block';
+            break;
+          case 'Red Dot':
+          case 'Mounts & Accessories':
+          case 'Other':
+            document.getElementById('replacement-approval').style.display = 'block';
+            break;
+          default:
+            document.getElementById('replacement-approval').style.display = 'none';
         }
         
-        // Function to validate the form
-        function validateForm() {
-            let isValid = true;
-            
-            // Validate product
-            const product = document.getElementById('product').value.trim();
-            if (product === '') {
-                document.getElementById('product-error').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('product-error').style.display = 'none';
-            }
-            
-            // Validate serial number
-            const serialNumber = document.getElementById('serialNumber').value.trim();
-            if (serialNumber === '') {
-                document.getElementById('serialNumber-error').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('serialNumber-error').style.display = 'none';
-            }
-            
-            // Validate issue description
-            const issue = document.getElementById('issue').value.trim();
-            if (issue === '') {
-                document.getElementById('issue-error').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('issue-error').style.display = 'none';
-            }
-            
-            return isValid;
+        // Toggle serial number visibility
+        const hideSerialNumberTypes = ['Binocular', 'Spotting Scope', 'Mounts & Accessories', 'Other', 'Eyewear'];
+        const serialNumberContainer = document.getElementById('serialNumberContainer');
+        const serialNumberInput = document.getElementById('serialNumber');
+        if (hideSerialNumberTypes.includes(productType)) {
+          serialNumberContainer.style.display = 'none';
+          serialNumberInput.removeAttribute('required');
+        } else {
+          serialNumberContainer.style.display = 'block';
+          serialNumberInput.setAttribute('required', 'required');
         }
-        
-        // Function to submit the form
-        function submitForm(e) {
-            e.preventDefault();
-            
-            if (!validateForm()) {
-                return;
-            }
-            
-            // Get form values
-            const product = document.getElementById('product').value.trim();
-            const serialNumber = document.getElementById('serialNumber').value.trim();
-            const productType = document.getElementById('productType').value;
-            const purchaseDate = document.getElementById('purchaseDate').value;
-            const issue = document.getElementById('issue').value.trim();
-            
-            // Create new repair object
-            const newRepair = {
-                id: generateRepairId(),
-                product: product,
-                serialNumber: serialNumber,
-                productType: productType,
-                purchaseDate: purchaseDate,
-                issue: issue,
-                dateSubmitted: new Date().toLocaleDateString(),
-                status: 'Waiting for Product'
-            };
-            
-            // Get existing repairs from localStorage or create empty array
-            const existingRepairs = JSON.parse(localStorage.getItem('leupoldRepairs')) || [];
-            
-            // Add new repair to the array
-            existingRepairs.push(newRepair);
-            
-            // Save back to localStorage
-            localStorage.setItem('leupoldRepairs', JSON.stringify(existingRepairs));
-            
-            // Show success message
-            document.getElementById('success-message').style.display = 'block';
-            
-            // Reset form
-            document.getElementById('repair-form').reset();
-            
-            // Redirect to index page after 2 seconds
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+      } else {
+        productSpecificFields.style.display = 'none';
+      }
+    }
+
+    document.getElementById('productType').addEventListener('change', toggleProductFields);
+
+    // Generate a unique repair ID
+    function generateRepairId() {
+      return 'R' + Date.now().toString().slice(-6);
+    }
+
+    // Validate form fields
+    function validateForm() {
+      let isValid = true;
+      const returnName = document.getElementById('returnName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const state = document.getElementById('state').value.trim();
+      const zipCode = document.getElementById('zipCode').value.trim();
+      const product = document.getElementById('product').value.trim();
+      const serialNumber = document.getElementById('serialNumber').value.trim();
+      const issue = document.getElementById('issue').value.trim();
+      const productType = document.getElementById('productType').value;
+      
+      if (returnName === '') {
+        document.getElementById('returnName-error').style.display = 'block';
+        isValid = false;
+      }
+      if (!/^\S+@\S+\.\S+$/.test(email)) {
+        document.getElementById('email-error').style.display = 'block';
+        isValid = false;
+      }
+      if (address === '') {
+        document.getElementById('address-error').style.display = 'block';
+        isValid = false;
+      }
+      if (city === '' || state === '' || zipCode === '') {
+        isValid = false;
+      }
+      if (product === '') {
+        document.getElementById('product-error').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('product-error').style.display = 'none';
+      }
+      const hideSerialNumberTypes = ['Binocular', 'Spotting Scope', 'Mounts & Accessories', 'Other', 'Eyewear'];
+      const serialNumberRequired = !hideSerialNumberTypes.includes(productType);
+      if (serialNumberRequired && serialNumber === '') {
+        document.getElementById('serialNumber-error').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('serialNumber-error').style.display = 'none';
+      }
+      if (issue === '') {
+        document.getElementById('issue-error').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('issue-error').style.display = 'none';
+      }
+      isValid = isValid && returnName !== '' && /^\S+@\S+\.\S+$/.test(email) && address !== '' && city !== '' && state !== '' && zipCode !== '';
+      
+      // Validate replacement approval if visible
+      const replacementApprovalSection = document.getElementById('replacement-approval');
+      if (replacementApprovalSection.style.display !== 'none') {
+        const approveYes = document.getElementById('approve-yes');
+        const approveNo = document.getElementById('approve-no');
+        if (!approveYes.checked && !approveNo.checked) {
+          alert('Please select whether you approve replacement without contact.');
+          isValid = false;
         }
-        
-        // Add event listener to form submit
-        document.getElementById('repair-form').addEventListener('submit', submitForm);
-    </script>
+      }
+      return isValid;
+    }
+
+    // Submit the form
+    function submitForm(e) {
+      e.preventDefault();
+      if (!validateForm()) return;
+      
+      const returnName = document.getElementById('returnName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const state = document.getElementById('state').value.trim();
+      const zipCode = document.getElementById('zipCode').value.trim();
+      const product = document.getElementById('product').value.trim();
+      const serialNumber = document.getElementById('serialNumber').value.trim();
+      const productType = document.getElementById('productType').value;
+      const purchaseDate = document.getElementById('purchaseDate').value;
+      const issue = document.getElementById('issue').value.trim();
+      const hideSerialNumberTypes = ['Binocular', 'Spotting Scope', 'Mounts & Accessories', 'Other', 'Eyewear'];
+      const finalSerialNumber = hideSerialNumberTypes.includes(productType) ? 'N/A' : serialNumber;
+      
+      let replacementApproval = '';
+      const replacementApprovalSection = document.getElementById('replacement-approval');
+      if (replacementApprovalSection.style.display !== 'none') {
+        replacementApproval = document.getElementById('approve-yes').checked ? 'Yes' : 'No';
+      }
+      
+      const selectedIssues = [];
+      document.querySelectorAll('input[name="issues[]"]:checked').forEach(cb => selectedIssues.push(cb.value));
+      
+      let additionalFields = {};
+      if (productType === 'Rifle Scope') {
+        additionalFields.magnification = document.getElementById('magnification')?.value || '';
+        additionalFields.objectiveLens = document.getElementById('objectiveLens')?.value || '';
+        additionalFields.reticleType = document.getElementById('reticleType')?.value || '';
+      } else if (productType === 'Rangefinder') {
+        additionalFields.maxRange = document.getElementById('maxRange')?.value || '';
+        additionalFields.batteryType = document.getElementById('batteryType')?.value || '';
+      }
+      
+      const newRepair = {
+        id: generateRepairId(),
+        returnName: returnName,
+        email: email,
+        phone: phone,
+        address: `${address}, ${city}, ${state} ${zipCode}`,
+        product: product,
+        serialNumber: finalSerialNumber,
+        productType: productType,
+        purchaseDate: purchaseDate,
+        selectedIssues: selectedIssues,
+        issue: issue,
+        dateSubmitted: new Date().toLocaleDateString(),
+        status: 'Waiting for Product',
+        ...additionalFields
+      };
+      if (replacementApproval) newRepair.replacementApproval = replacementApproval;
+      
+      const existingRepairs = JSON.parse(localStorage.getItem('leupoldRepairs')) || [];
+      existingRepairs.push(newRepair);
+      localStorage.setItem('leupoldRepairs', JSON.stringify(existingRepairs));
+      
+      document.getElementById('success-message').style.display = 'block';
+      document.getElementById('repair-form').reset();
+      document.getElementById('product-specific-fields').style.display = 'none';
+      setTimeout(() => window.location.href = 'index.html', 2000);
+    }
+    
+    document.getElementById('repair-form').addEventListener('submit', submitForm);
+  </script>
 </body>
 </html>
