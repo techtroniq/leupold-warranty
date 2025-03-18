@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leupold Warranty Repair Center</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #1A1A1A;
+            color: #FFFFFF;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        nav {
+            background-color: #2A2A2A;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        nav a {
+            color: #C4A052;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+            color: #FFFFFF;
+        }
+        .content {
+            padding: 20px;
+            background: #FFFFFF;
+            border-radius: 5px;
+            border-left: 5px solid #C4A052;
+            margin-bottom: 20px;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #FFFFFF;
+            font-size: 0.8rem;
+            padding: 10px;
+            background-color: #1A1A1A;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: #C4A052;
+            color: #1A1A1A;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn:hover {
+            background-color: #D4AF37;
+        }
+        .btn-secondary {
+            background-color: #2A2A2A;
+            color: #FFFFFF;
+        }
+        .btn-secondary:hover {
+            background-color: #444;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #2A2A2A;
+            color: #FFFFFF;
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .status-pending {
+            color: #FF9800;
+            font-weight: bold;
+        }
+        .status-approved {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .status-completed {
+            color: #2196F3;
+            font-weight: bold;
+        }
+        .status-denied {
+            color: #F44336;
+            font-weight: bold;
+        }
+        .no-repairs {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.svg" alt="Leupold Logo" height="40">
+        <h1>Warranty Repair Center</h1>
+    </header>
+    
+    <nav>
+        <a href="index.html">My Repairs</a>
+        <a href="https://www.leupold.com/products" target="_blank">Products</a>
+        <a href="https://www.leupold.com/support" target="_blank">Support</a>
+    </nav>
+    
+    <div class="content">
+        <h2>My Repair Requests</h2>
+        <p>View the status of your warranty repair requests below. To submit a new repair request, click the button.</p>
+        
+        <a href="new-repair.html" class="btn">+ New Repair Request</a>
+        
+        <div id="repairs-table-container">
+            <table id="repairs-table">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Product</th>
+                        <th>Serial Number</th>
+                        <th>Issue</th>
+                        <th>Date Submitted</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="repairs-list">
+                    <!-- Repair entries will be added here dynamically -->
+                </tbody>
+            </table>
+            <div id="no-repairs" class="no-repairs">
+                You have not submitted any repair requests yet.
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <h3>About Leupold Warranty Repairs</h3>
+        <p>Leupold offers a lifetime warranty on our products. Our repair technicians are experts at diagnosing and fixing issues with your optics. Please provide detailed information when submitting a repair request to help us serve you better.</p>
+        <p>For questions about your repair, please contact our customer service team at <strong>1-800-LEUPOLD</strong>.</p>
+    </div>
+    
+    <div style="text-align: center; margin: 20px 0;">
+        <button id="clear-data" class="btn btn-secondary">Clear All Test Data</button>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Leupold & Stevens, Inc. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to load repair requests from localStorage
+        function loadRepairs() {
+            const repairs = JSON.parse(localStorage.getItem('leupoldRepairs')) || [];
+            const repairsList = document.getElementById('repairs-list');
+            const noRepairsMsg = document.getElementById('no-repairs');
+            const repairsTable = document.getElementById('repairs-table');
+            
+            // Clear the current list
+            repairsList.innerHTML = '';
+            
+            // Show/hide elements based on whether there are repairs
+            if (repairs.length === 0) {
+                noRepairsMsg.style.display = 'block';
+                repairsTable.style.display = 'none';
+            } else {
+                noRepairsMsg.style.display = 'none';
+                repairsTable.style.display = 'table';
+                
+                // Add each repair to the table
+                repairs.forEach(repair => {
+                    const row = document.createElement('tr');
+                    
+                    // Create status class
+                    let statusClass = '';
+                    switch(repair.status) {
+                        case 'Waiting for Product':
+                            statusClass = 'status-pending';
+                            break;
+                        case 'Approved':
+                            statusClass = 'status-approved';
+                            break;
+                        case 'Completed':
+                            statusClass = 'status-completed';
+                            break;
+                        case 'Denied':
+                            statusClass = 'status-denied';
+                            break;
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${repair.id}</td>
+                        <td>${repair.product}</td>
+                        <td>${repair.serialNumber}</td>
+                        <td>${repair.issue}</td>
+                        <td>${repair.dateSubmitted}</td>
+                        <td class="${statusClass}">${repair.status}</td>
+                    `;
+                    
+                    repairsList.appendChild(row);
+                });
+            }
+        }
+        
+        // Add event listener for clear data button
+        document.getElementById('clear-data').addEventListener('click', function() {
+            if (confirm('Are you sure you want to delete all repair requests? This cannot be undone.')) {
+                localStorage.removeItem('leupoldRepairs');
+                loadRepairs(); // Refresh the display
+            }
+        });
+        
+        // Load repairs when the page loads
+        window.addEventListener('load', loadRepairs);
+    </script>
+</body>
+</html>
