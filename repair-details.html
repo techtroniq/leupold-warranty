@@ -1,417 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Detailed view of your Leupold warranty repair request.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Repair Details - Leupold Warranty Repair Center</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repair Details - Leupold</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* More specific styles for the details page sections */
+        .detail-section {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .detail-section h3 {
+            color: #C4A052; /* Gold color for section titles */
+            margin-bottom: 15px;
+            border-bottom: 2px solid #C4A052;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+        .detail-item {
+            margin-bottom: 10px;
+        }
+        .detail-item strong {
+            display: inline-block;
+            width: 150px; /* Adjust as needed for label alignment */
+            color: #555;
+        }
+        /* New styles for top summary alignment */
+        .top-summary {
+             margin-bottom: 25px;
+             /* Remove text-align: center if labels should be left-aligned overall */
+        }
+        .top-summary .summary-label {
+            display: inline-block;
+            width: 150px; /* Adjust width as needed */
+            text-align: right;
+            margin-right: 5px; /* Space between label and value */
+            color: #555; /* Match other labels */
+        }
+        #back-button {
+            margin-top: 20px; /* Add space above back button */
+        }
+    </style>
 </head>
 <body>
   <header>
     <img src="logo.svg" alt="Leupold Logo" height="40">
-    <h1>Repair Details</h1>
+    <h1>Warranty Repair Center</h1>
   </header>
   
   <nav>
     <a href="index.html">My Repairs</a>
-    <a href="https://www.leupold.com/products" target="_blank">Products</a>
+    <a href="https://www.leupold.com/shop" target="_blank">Products</a>
     <a href="https://www.leupold.com/support" target="_blank">Support</a>
   </nav>
-  
-  <div class="content">
-    <h2>Repair Request Details</h2>
-    <div id="repair-details-container">
-      <!-- Repair details will be dynamically loaded here -->
-    </div>
-    <a href="index.html" class="btn">Back to My Repairs</a>
-  </div>{{ ... }}
-  <div class="content">
-      <h2>New Repair Request</h2>
-      <p>Please provide your contact information and details about your Leupold product. Fields marked with an <span class="required">*</span> are required.</p>
-  
-      <!-- Progress Indicator -->
-      <div id="progress-indicator" style="margin-bottom: 20px; text-align: center; font-weight: bold;">Step 1 of 3: Contact Information</div>
-  
-      <div id="success-message" class="success-message">
-          Your repair request has been submitted successfully! Redirecting to your repair list...
-      </div>
-  
-      <form id="repair-form">
-          <!-- Step 1: Contact Information -->
-          <div id="step-1" class="form-step">
-              <div class="content" style="margin-bottom: 20px;">
-                  <h3>Contact Information</h3>
-                  {{ ... }} {{-- Existing Contact Info form groups --}} {{ ... }}
-              </div>
-          </div>
-  
-          <!-- Step 2: Product Information -->
-          <div id="step-2" class="form-step" style="display: none;">
-              <!-- Product Type Selection -->
-              <div class="content">
-                  <h3>Product Information</h3>
-                  <div class="form-group">
-                      <label for="productType">Product Type <span class="required">*</span></label>
-                      <select id="productType" name="productType" required>
-                         {{ ... }} {{-- Existing product type options --}} {{ ... }}
-                      </select>
-                      <div id="productType-error" class="error-message">Please select a product type</div> <!-- Added error message div -->
-                  </div>
-  
-                  <!-- Conditionally Shown Product Details -->
-                  <div id="product-specific-fields" style="display: none;">
-                      {{ ... }} {{-- Existing product name, serial, date, specific fields --}} {{ ... }}
-                  </div>
-              </div>
-          </div>
-  
-          <!-- Step 3: Issue Details -->
-          <div id="step-3" class="form-step" style="display: none;">
-              <div class="content">
-                  <h3>Issue Details</h3>
-  
-                  <!-- Replacement Approval Section (conditionally shown by JS) -->
-                  <div id="replacement-approval" style="display: none; margin: 20px 0; ...">
-                       {{ ... }} {{-- Existing replacement approval content --}} {{ ... }}
-                       <div id="replacement-approval-error" class="error-message" style="margin-top: 10px;">Please select Yes or No for replacement approval.</div> <!-- Added error message div -->
-                  </div>
-  
-                  <!-- Conditional Issue Checklists (shown by JS) -->
-                   {{ ... }} {{-- Existing rifle-scope-issues, spotting-scope-issues etc. divs --}} {{ ... }}
-                   <div id="issue-checklist-error" class="error-message">Please select at least one issue or describe the issue below.</div> <!-- Added generic error message div -->
-  
-  
-                  <!-- Detailed Issue Description -->
-                  <div class="form-group" style="margin-top: 20px;">
-                      <label for="issue">Describe the Issue <span class="required">*</span></label>
-                      <textarea id="issue" name="issue" rows="5" required placeholder="Please provide as much detail as possible about the problem you are experiencing."></textarea>
-                      <div id="issue-error" class="error-message">Please describe the issue</div>
-                  </div>
-              </div>
-          </div>
-  
-          <!-- Navigation -->
-          <div id="form-navigation" style="margin-top: 20px; text-align: right;">
-              <button type="button" id="prev-btn" class="btn btn-secondary" style="display: none; float: left;">Previous</button>
-              <button type="button" id="next-btn" class="btn">Next</button> <!-- Will change to type="submit" on last step via JS -->
-          </div>
-  
-          <!-- Original Submit Button - Now handled by Next/Prev logic
-          <div class="text-center margin-bottom-20">
-              <button type="submit" class="btn">Submit Repair Request</button>
-          </div>
-          -->
-      </form>
-  </div>
-  {{ ..{{ ... }} {{-- Keep existing productSpecificsConfig --}} {{ ... }}
-  
-  // --- DOM Element References ---
-  const productTypeSelect = document.getElementById('productType');
-  {{ ... }} {{-- Keep other existing refs --}} {{ ... }}
-  const repairForm = document.getElementById('repair-form');
-  // const submitButton = repairForm?.querySelector('button[type="submit"]'); // No longer needed directly
-  const successMessageDiv = document.getElementById('success-message');
-  {{ ... }} {{-- Keep other existing refs --}} {{ ... }}
-  const replacementApprovalSection = document.getElementById('replacement-approval');
-  const replacementApprovalError = document.getElementById('replacement-approval-error'); // Added
-  const productTypeError = document.getElementById('productType-error'); // Added
-  const issueChecklistError = document.getElementById('issue-checklist-error'); // Added
-  
-  // Step Navigation Elements
-  const steps = document.querySelectorAll('.form-step');
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  const progressIndicator = document.getElementById('progress-indicator');
-  const totalSteps = steps.length;
-  let currentStep = 1;
-  
-  // --- Helper Functions ---
-  
-  {{ ... }} {{-- Keep updateProductNamePlaceholder --}} {{ ... }}
-  {{ ... }} {{-- Keep toggleProductFields (will be called when moving to/from step 2) --}} {{ ... }}
-  {{ ... }} {{-- Keep generateRepairId --}} {{ ... }}
-  {{ ... }} {{-- Keep showValidationError & hideValidationError --}} {{ ... }}
-  
-  
-  // --- Multi-Step Form Logic ---
-  
-  // Updates button visibility, text, and progress indicator
-  function updateFormUI() {
-      // Update Progress Indicator
-      const stepTitles = ["Contact Information", "Product Information", "Issue Details"];
-      if (progressIndicator) {
-          progressIndicator.textContent = `Step ${currentStep} of ${totalSteps}: ${stepTitles[currentStep - 1]}`;
-      }
-  
-      // Show/Hide Steps
-      steps.forEach((step, index) => {
-          step.style.display = (index === currentStep - 1) ? 'block' : 'none';
-      });
-  
-      // Update Button States
-      if (prevBtn) {
-          prevBtn.style.display = (currentStep === 1) ? 'none' : 'inline-block';
-      }
-      if (nextBtn) {
-          if (currentStep === totalSteps) {
-              nextBtn.textContent = 'Submit Repair Request';
-              nextBtn.type = 'submit'; // Change type to trigger form submission
-          } else {
-              nextBtn.textContent = 'Next';
-              nextBtn.type = 'button'; // Ensure it's a button for intermediate steps
-          }
-      }
-       // Ensure product fields are updated if we land on step 2
-       if (currentStep === 2) {
-           toggleProductFields(); // Refresh conditional fields based on current selection
-       }
-  }
-  
-  // Validates fields within a specific step
-  function validateStep(stepNumber) {
-      let isValid = true;
-      // Clear previous errors specific to this step before re-validating
-      const stepElement = document.getElementById(`step-${stepNumber}`);
-      stepElement.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-      stepElement.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-  
-  
-      if (stepNumber === 1) {
-          // Validate Contact Info
-          const requiredContactFields = ['returnName', 'email', 'address', 'city', 'state', 'zipCode'];
-          requiredContactFields.forEach(id => {
-              const input = document.getElementById(id);
-              const error = document.getElementById(`${id}-error`);
-              if (input && error) {
-                  if (input.value.trim() === '') {
-                      isValid = false;
-                      showValidationError(input, error);
-                  } else {
-                      // Specific validation for email format
-                      if (id === 'email') {
-                          const emailPattern = /^\S+@\S+\.\S+$/;
-                          if (!emailPattern.test(input.value.trim())) {
-                              isValid = false;
-                              showValidationError(input, error, 'Please enter a valid email address');
-                          } else {
-                              hideValidationError(input, error);
-                          }
-                      } else {
-                           hideValidationError(input, error);
-                      }
-                  }
-              }
-          });
-      } else if (stepNumber === 2) {
-          // Validate Product Info
-          // Product Type
-          if (productTypeSelect.value === '') {
-              isValid = false;
-              showValidationError(productTypeSelect, productTypeError);
-          } else {
-              hideValidationError(productTypeSelect, productTypeError);
-  
-               // Only validate sub-fields if product type is selected
-               const selectedType = productTypeSelect.value;
-               const config = productSpecificsConfig[selectedType];
-  
-               // Product Name
-               const productInput = document.getElementById('product');
-               const productError = document.getElementById('product-error');
-               if (productInput && productError && productInput.value.trim() === '') {
-                    isValid = false;
-                    showValidationError(productInput, productError);
-               } else if (productInput && productError) {
-                   hideValidationError(productInput, productError);
-               }
-  
-               // Serial Number (if required)
-               if (config?.serialRequired) {
-                    const serialInput = document.getElementById('serialNumber');
-                    const serialError = document.getElementById('serialNumber-error');
-                   if (serialInput && serialError && serialInput.value.trim() === '') {
-                       isValid = false;
-                       showValidationError(serialInput, serialError);
-                   } else if (serialInput && serialError) {
-                       hideValidationError(serialInput, serialError);
-                   }
-               }
-               // Add validation for other specific fields if they become required (e.g., magnification)
-          }
-  
-      } else if (stepNumber === 3) {
-          // Validate Issue Details
-  
-          // Replacement Approval (if visible)
-          if (replacementApprovalSection && replacementApprovalSection.style.display !== 'none') {
-              const approveYes = document.getElementById('approve-yes');
-              const approveNo = document.getElementById('approve-no');
-              if (!approveYes.checked && !approveNo.checked) {
-                  isValid = false;
-                  if(replacementApprovalError) replacementApprovalError.style.display = 'block';
-              } else {
-                   if(replacementApprovalError) replacementApprovalError.style.display = 'none';
-              }
-          }
-  
-           // Issue Checklists (ensure at least one is checked OR description is filled)
-           const issueTextarea = document.getElementById('issue');
-           const issueTextareaError = document.getElementById('issue-error');
-           const checkedIssues = document.querySelectorAll('.product-issues input[type="checkbox"]:checked');
-           const isAnyIssueSectionVisible = Array.from(allIssueSections).some(sec => sec.style.display === 'block');
-  
-           if (isAnyIssueSectionVisible && checkedIssues.length === 0 && issueTextarea.value.trim() === '') {
-               // If an issue section IS visible, require either a checkbox or the textarea
-               isValid = false;
-               if(issueChecklistError) issueChecklistError.style.display = 'block'; // Show general checklist error
-               showValidationError(issueTextarea, issueTextareaError, 'Please select an issue type or describe the issue.'); // Also show textarea error
-           } else if (!isAnyIssueSectionVisible && issueTextarea.value.trim() === '') {
-                // If NO issue section is visible (e.g., for 'Other' product type), the textarea becomes mandatory
-                isValid = false;
-                showValidationError(issueTextarea, issueTextareaError); // Show standard textarea error
-                if(issueChecklistError) issueChecklistError.style.display = 'none'; // Hide checklist error
-           }
-           else {
-               // If validation passes (either checkbox checked or textarea filled)
-               if(issueChecklistError) issueChecklistError.style.display = 'none';
-               hideValidationError(issueTextarea, issueTextareaError);
-           }
-      }
-  
-      // Scroll to first error if invalid
-      if (!isValid) {
-          const firstError = stepElement.querySelector('.is-invalid, .error-message[style*=\"block\"]');
-          if (firstError) {
-               // Find the parent form-group or the element itself to scroll to
-               const scrollToElement = firstError.closest('.form-group') || firstError;
-               scrollToElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-      }
-  
-      return isValid;
-  }
-  
-  
-  // --- Form Submission Logic --- (Modified)
-  
-  // Handles form submission AFTER final step validation
-  function submitForm(event) {
-      event.preventDefault(); // Prevent default only if validation fails or for JS submission
-  
-       if (!validateStep(totalSteps)) { // Validate the final step before submitting
-           console.log("Final step validation failed.");
-           return; // Stop submission if last step is invalid
-       }
-  
-      console.log("Form validation passed. Submitting...");
-      if (submitButton) submitButton.disabled = true; // Disable submit button
-  
-      try {
-          const formData = new FormData(repairForm);
-          const repairData = {};
-          formData.forEach((value, key) => {
-              // Handle checkboxes (like issues) - gather all values for the same name
-              if (key.endsWith('[]')) {
-                  const actualKey = key.slice(0, -2);
-                  if (!repairData[actualKey]) {
-                      repairData[actualKey] = [];
-                  }
-                  repairData[actualKey].push(value);
-              } else {
-                  repairData[key] = value;
-              }
-          });
-  
-          // Add generated ID and submission date/status
-          repairData.id = generateRepairId();
-          repairData.dateSubmitted = new Date().toLocaleDateString();
-          repairData.status = 'Waiting for Product'; // Initial status
-  
-           // Combine address fields if needed (or handle separately if backend expects it)
-           // repairData.fullAddress = `${repairData.address}, ${repairData.city}, ${repairData.state} ${repairData.zipCode}`;
-  
-  
-          // Retrieve existing repairs and add the new one
-          let repairs = JSON.parse(localStorage.getItem('leupoldRepairs')) || [];
-          repairs.push(repairData);
-          localStorage.setItem('leupoldRepairs', JSON.stringify(repairs));
-  
-          console.log('Repair submitted:', repairData);
-  
-          // Show success message and redirect
-          if (successMessageDiv) successMessageDiv.style.display = 'block';
-          repairForm.style.display = 'none'; // Hide form
-          if (progressIndicator) progressIndicator.style.display = 'none'; // Hide progress
-          if (document.getElementById('form-navigation')) document.getElementById('form-navigation').style.display = 'none'; // Hide nav
-  
-  
-          setTimeout(() => {
-              window.location.href = 'index.html'; // Redirect after a short delay
-          }, 2000);
-  
-      } catch (error) {
-          console.error('Error submitting form:', error);
-          alert('There was an error submitting your request. Please try again.');
-          if (submitButton) submitButton.disabled = false; // Re-enable button on error
-      }
-  }
-  
-  // --- Event Listeners ---
-  
-  // Add listener to product type dropdown (existing)
-  if (productTypeSelect) {
-      productTypeSelect.addEventListener('change', () => {
-           toggleProductFields(); // Update fields within step 2 when type changes
-           hideValidationError(productTypeSelect, productTypeError); // Hide error on change
-      });
-  }
-  
-  // Add listeners for form navigation
-  if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-          if (nextBtn.type === 'button') { // Only handle 'Next' logic here
-              if (validateStep(currentStep)) {
-                  currentStep++;
-                  updateFormUI();
-                   window.scrollTo(0, 0); // Scroll to top of page on step change
-              }
-          }
-          // If type is 'submit', the form submit listener will handle it
-      });
-  }
-  
-  if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-          if (currentStep > 1) {
-              currentStep--;
-              updateFormUI();
-              window.scrollTo(0, 0); // Scroll to top of page on step change
-          }
-      });
-  }
-  
-  // Add listener for form submission (modified)
-  if (repairForm) {
-      repairForm.addEventListener('submit', submitForm);
-  }
-  
-  
-  // --- Initialization ---
-  // Initial UI setup
-  updateFormUI();
-  
-  // Existing listeners for input validation can remain if desired,
-  // but the primary validation now happens on step change/submit.
-  // Example: Remove real-time validation or keep it for instant feedback
-  // document.getElementById('returnName')?.addEventListener('input', () => { ... });
-  
-  . }}
-  
-  <footer>
-    <p>&copy; 2025 Leupold & Stevens, Inc. All rights reserved.</p>
-  </footer>
-  
-  <script src="details.js"></script>
+
+    <main class="container">
+        <div class="content">
+            <h2>Repair Request Details</h2>
+
+            <!-- Top Summary Section -->
+            <div class="top-summary">
+                 <div class="detail-item"><strong class="summary-label">Repair ID:</strong> <span id="detail-repair-id-value"></span></div>
+                 <div class="detail-item"><strong class="summary-label">Status:</strong> <span id="detail-status"></span></div>
+                 <div class="detail-item"><strong class="summary-label">Date Submitted:</strong> <span id="detail-createdTimestamp"></span></div>
+            </div>
+
+            <!-- Contact Information Section -->
+            <div class="detail-section">
+                <h3>Contact Information</h3>
+                <div class="detail-item"><strong>Name:</strong> <span id="detail-returnName"></span></div>
+                <div class="detail-item"><strong>Email:</strong> <span id="detail-email"></span></div>
+                <div class="detail-item"><strong>Phone:</strong> <span id="detail-phone"></span></div>
+                <div class="detail-item"><strong>Address:</strong> <span id="detail-address"></span></div>
+                <div class="detail-item"><strong>City:</strong> <span id="detail-city"></span></div>
+                <div class="detail-item"><strong>State:</strong> <span id="detail-state"></span></div>
+                <div class="detail-item"><strong>Zip Code:</strong> <span id="detail-zipCode"></span></div>
+            </div>
+
+            <!-- Product Information Section -->
+            <div class="detail-section">
+                <h3>Product Information</h3>
+                <div class="detail-item"><strong>Product Type:</strong> <span id="detail-productType"></span></div>
+                <div class="detail-item"><strong>Product Name:</strong> <span id="detail-product"></span></div>
+                <div class="detail-item"><strong>Serial Number:</strong> <span id="detail-serialNumber"></span></div>
+                <div class="detail-item"><strong>Purchase Date:</strong> <span id="detail-purchaseDate"></span></div>
+                <!-- Add placeholders for other product-specific fields if necessary -->
+            </div>
+
+            <!-- Issue Details Section -->
+            <div class="detail-section">
+                <h3>Issue Details</h3>
+                <div class="detail-item"><strong>Selected Issues:</strong> <ul id="detail-selectedIssues"></ul></div>
+                <div class="detail-item"><strong>Detailed Description:</strong> <pre id="detail-issue" style="white-space: pre-wrap; background-color: #f9f9f9; padding: 10px; border: 1px solid #eee; border-radius: 4px;"></pre></div>
+                <!-- Replacement Approval (might be nested or separate) -->
+                 <div class="detail-item" id="replacement-approval-display" style="display: none;"> 
+                     <strong>Replacement Approved:</strong> <span id="detail-replacementApproval"></span>
+                 </div>
+            </div>
+
+            <button id="back-button" class="btn btn-secondary" onclick="window.history.back();">Back to My Repairs</button>
+
+        </div><!-- /.content -->
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; Leupold & Stevens, Inc.</p>
+        </div>
+    </footer>
+
+    <script src="details.js" defer></script> 
 </body>
 </html>

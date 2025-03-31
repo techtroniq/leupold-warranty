@@ -17,7 +17,7 @@ function loadRepairs() {
         repairsTable.style.display = 'table';
 
         // Add each repair to the table and make each row clickable
-        repairs.forEach(repair => {
+        repairs.forEach((repair, index) => {
             const row = document.createElement('tr');
             // Create status class based on repair status
             let statusClass = '';
@@ -40,21 +40,24 @@ function loadRepairs() {
             }
 
             // Ensure values exist or provide fallback
-            const displayId = repair.id || 'N/A';
-            const displayProduct = repair.product || 'N/A';
+            const repairData = repair; // Use the full repair object for printing
             const displaySerial = repair.serialNumber || 'N/A';
-            // Truncate long issue descriptions for the table view
-            const displayIssue = repair.issue ? (repair.issue.length > 50 ? repair.issue.substring(0, 47) + '...' : repair.issue) : 'N/A';
-            const displayDate = repair.dateSubmitted || 'N/A';
-            const displayStatus = repair.status || 'Pending'; // Default to Pending visually
+            const displayIssue = repair.selectedIssues || repair.issue || 'N/A'; // Prefer selected issues
+            const displayId = repair.repairId || 'N/A';
+            const displayDateObj = repair.createdTimestamp ? new Date(repair.createdTimestamp) : null;
+            const displayDate = displayDateObj ? displayDateObj.toLocaleDateString() : 'N/A'; // Format date nicely
+            const displayStatus = repair.status || 'Submitted'; // Default status
 
             row.innerHTML = `
                 <td>${displayId}</td>
-                <td>${displayProduct}</td>
+                <td>${repair.product || 'N/A'}</td>
                 <td>${displaySerial}</td>
                 <td>${displayIssue}</td>
                 <td>${displayDate}</td>
                 <td class="${statusClass}">${displayStatus}</td>
+                <td class="actions no-print"> 
+                    <button class="btn-print-combined" data-repair-id="${displayId}" title="Print Shipping Label">Shipping Label</button>
+                </td>
             `;
 
             // Add title attribute for full issue text on hover
@@ -63,13 +66,36 @@ function loadRepairs() {
                  issueCell.title = repair.issue;
             }
 
-
+            // Add click listener for row navigation (excluding the action buttons cell)
             // When a row is clicked, navigate to the details page with the repair ID in the URL
-            row.addEventListener('click', function() {
-                window.location.href = 'repair-details.html?id=' + encodeURIComponent(displayId);
+            row.addEventListener('click', function(e) {
+                // Only navigate if the click wasn't on a button or link inside the actions cell
+                if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A' && !e.target.closest('.actions')) {
+                 window.location.href = 'repair-details.html?repairId=' + encodeURIComponent(displayId);
+                }
             });
 
             repairsList.appendChild(row);
+        });
+
+        // Add event listeners for the print buttons (using event delegation)
+        repairsList.addEventListener('click', function(e) {
+            const target = e.target;
+            const repairId = target.getAttribute('data-repair-id');
+            if (!repairId) return; // Click wasn't on a button with the ID
+
+            const repairToPrint = repairs.find(r => r.repairId === repairId); // Use repairId
+
+            if (!repairToPrint) {
+                console.error("Repair data not found for ID:", repairId);
+                alert("Could not find repair data to print.");
+                return;
+            }
+
+            if (target.classList.contains('btn-print-combined')) {
+                const combinedHTML = generateCombinedPrintHTML(repairToPrint);
+                triggerPrint(combinedHTML, 'Repair Documents - ' + repairId);
+            }
         });
     }
 }

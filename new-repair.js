@@ -1,7 +1,7 @@
 // Configuration for product-specific fields and issues
 const productSpecificsConfig = {
     'Rifle Scope': {
-        fields: ['magnification-group', 'objectiveLens-group', 'reticleType-group'],
+        fields: [],
         issues: 'rifle-scope-issues',
         placeholder: 'e.g., Mark 5HD 5-25x56',
         serialRequired: true
@@ -19,7 +19,7 @@ const productSpecificsConfig = {
         serialRequired: false
     },
     'Rangefinder': {
-        fields: ['maxRange-group', 'batteryType-group'],
+        fields: [],
         issues: 'rangefinder-issues',
         placeholder: 'e.g., RX-FullDraw 5',
         serialRequired: false
@@ -49,6 +49,11 @@ const serialNumberInput = document.getElementById('serialNumber');
 const serialNumberError = document.getElementById('serialNumber-error');
 const replacementApprovalSection = document.getElementById('replacement-approval'); // Get the replacement approval section
 const cancelBtn = document.getElementById('cancel-btn'); // Get reference to cancel button
+// Print Controls
+const printControlsDiv = document.getElementById('print-controls');
+const printCombinedBtn = document.getElementById('print-combined-btn');
+// const printLabelBtn = document.getElementById('print-label-btn');
+// const printPackingBtn = document.getElementById('print-packing-btn');
 
 // --- New Elements for Multi-Step ---
 const progressIndicator = document.getElementById('progress-indicator');
@@ -491,158 +496,160 @@ function handleNextOrSubmit() {
 }
 
 // Handles form submission (triggered by form's 'submit' event)
-function submitForm(event) {
-    if (event) { // Prevent default form submission only if triggered by event
-        event.preventDefault();
-    }
+async function submitForm(event) {
+    event.preventDefault(); // Prevent default form submission
 
-    // Re-validate the *entire* form on final submission attempt
+    // Validate the entire form before final submission
     if (!validateForm()) {
-        // Optionally, find the first invalid field across all steps and focus it
-        // Or display a general error message near the submit button
+        console.warn('Form validation failed on final submission.');
+        // Optionally, find the first invalid field and focus it
         const firstInvalid = repairForm.querySelector('.is-invalid');
         if (firstInvalid) {
-            // Find which step the invalid field is in and show that step
-            const invalidStepElement = firstInvalid.closest('.form-step');
-            if (invalidStepElement) {
-                const stepId = invalidStepElement.id; // e.g., "step-1"
-                const stepNum = parseInt(stepId.split('-')[1]);
-                if (stepNum && stepNum !== currentStep) {
-                    showStep(stepNum); // Navigate to the step with the error
-                }
-                // Scroll to and focus the invalid field
-                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                firstInvalid.focus();
-
-                // Display a general message if needed
-                const generalErrorArea = document.getElementById('form-navigation'); // Or another suitable place
-                if (generalErrorArea && !document.getElementById('general-submit-error')) {
-                    const errorMsg = document.createElement('div');
-                    errorMsg.id = 'general-submit-error';
-                    errorMsg.className = 'error-message';
-                    errorMsg.style.textAlign = 'right'; // Adjust alignment
-                    errorMsg.style.marginTop = '10px';
-                    errorMsg.textContent = 'Please correct the errors before submitting.';
-                    generalErrorArea.appendChild(errorMsg);
-                }
-
-            }
-        } else {
-             // If validateForm returned false but no .is-invalid found (shouldn't happen ideally)
-             alert("Please fill out all required fields correctly.");
+            firstInvalid.focus();
+            // Maybe scroll to it
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         return; // Stop submission if validation fails
     }
 
-    // Clear any general submission error message if validation passes
-    const generalErrorMsg = document.getElementById('general-submit-error');
-    if (generalErrorMsg) {
-        generalErrorMsg.remove();
-    }
+    console.log('Form is valid, proceeding with submission...');
+    // Disable submit button to prevent multiple submissions (re-enable on error)
+    const submitButton = document.getElementById('next-btn'); // Assuming next-btn is the submit button on the last step
+    if (submitButton) submitButton.disabled = true;
 
-
-    // Gather Form Data ---
     const formData = new FormData(repairForm);
-    const selectedType = productTypeSelect.value;
-    const config = productSpecificsConfig[selectedType];
+    const data = {};
+    const selectedIssues = []; // Array to hold selected issue values
 
-    const selectedIssues = [];
-    formData.getAll('issues[]').forEach(issue => selectedIssues.push(issue));
-
-    const additionalFields = {};
-    if (config && config.fields) {
-        config.fields.forEach(groupId => {
-            const groupElement = document.getElementById(groupId);
-            if (groupElement) {
-                const inputs = groupElement.querySelectorAll('input, select, textarea');
-                inputs.forEach(input => {
-                    if (input.name) { // Ensure the input has a name
-                        additionalFields[input.name] = formData.get(input.name) || '';
-                    }
-                });
+    formData.forEach((value, key) => {
+        // Check if the key is for selected issues checkboxes
+        if (key === 'selectedIssues[]') {
+            selectedIssues.push(value);
+        } else {
+            // Handle other fields normally
+            // If a key already exists (e.g., radio buttons with the same name),
+            // convert it to an array or decide how to handle multiple values.
+            // For this form structure, overwriting is likely okay for most fields
+            // except potentially checkboxes if not handled as an array.
+            if (data.hasOwnProperty(key)) {
+                // Example: Convert to array if it happens (adjust as needed)
+                if (!Array.isArray(data[key])) {
+                    data[key] = [data[key]];
+                }
+                data[key].push(value);
+            } else {
+                data[key] = value;
             }
-        });
-    }
-
-    const finalSerialNumber = (config?.serialRequired) ? formData.get('serialNumber').trim() : 'N/A';
-
-    const newRepair = {
-        id: generateRepairId(),
-        returnName: formData.get('returnName').trim(),
-        email: formData.get('email').trim(),
-        phone: formData.get('phone').trim(),
-        address: formData.get('address').trim(),
-        city: formData.get('city').trim(),
-        state: formData.get('state').trim(),
-        zipCode: formData.get('zipCode').trim(),
-        product: formData.get('product').trim(),
-        serialNumber: finalSerialNumber,
-        productType: selectedType,
-        purchaseDate: formData.get('purchaseDate'), // Keep as is
-        selectedIssues: selectedIssues, // Array of selected issue values
-        issue: formData.get('issue').trim(), // Detailed description
-        dateSubmitted: new Date().toLocaleDateString(),
-        status: 'Waiting for Product', // Default status
-        ...additionalFields // Spread operator adds fields like magnification, maxRange etc.
-    };
-
-    // Add replacement approval if it was visible and selected
-    if (replacementApprovalSection && replacementApprovalSection.style.display !== 'none') {
-        newRepair.replacementApproval = formData.get('replacementApproval') || 'Not Selected';
-    }
-
-    // --- Save to localStorage ---
-    try {
-        const existingRepairs = JSON.parse(localStorage.getItem('leupoldRepairs')) || [];
-        existingRepairs.push(newRepair);
-        localStorage.setItem('leupoldRepairs', JSON.stringify(existingRepairs));
-
-        // Show success message
-        successMessageDiv.style.display = 'block';
-        successMessageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // Optionally reset form (consider if user might want to submit another quickly)
-        // repairForm.reset();
-        // toggleProductFields(); // Reset fields visibility after form reset
-
-        // Redirect after delay
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 3000); // Increased delay to allow reading success message
-
-    } catch (e) {
-        console.error("Error saving to localStorage:", e);
-        alert("Failed to save repair request. LocalStorage might be full or disabled. Please check console.");
-        // Re-enable button if saving fails
-        // submitButton.disabled = false;
-        // submitButton.textContent = 'Submit Request';
-    }
-}
-
-// --- Event Listeners ---
-
-// Add listener to product type dropdown
-productTypeSelect?.addEventListener('change', toggleProductFields);
-
-// Add listener for form submission (now attached to the form itself)
-repairForm?.addEventListener('submit', submitForm); // Added: Listen for submit event on the form
-
-// Add listeners for multi-step navigation
-nextBtn?.addEventListener('click', handleNextOrSubmit); // Changed: Use the new handler
-prevBtn?.addEventListener('click', prevStep);
-cancelBtn?.addEventListener('click', cancelRepair); // Add listener for cancel button
-
-// --- Initial Page Load Logic ---
-
-// Run toggleProductFields on initial load to set up the form correctly
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        showStep(currentStep); // Show the first step initially
-        toggleProductFields(); // Still needed to set up product fields initially if step 2 loads first somehow or for direct access later
+        }
     });
-} else {
-    showStep(currentStep); // Show the first step initially
-    toggleProductFields(); // Still needed
+
+    // Add the collected issues to the data object under a single key
+    data.selectedIssues = selectedIssues;
+
+    // Generate Repair ID *before* potential save/API call
+    const repairId = generateRepairId();
+    data.repairId = repairId; // Add repairId to the data object
+
+    // Add created date/time
+    data.createdTimestamp = new Date().toISOString();
+
+    console.log('Submitting data:', data);
+
+    // --- Simulate saving data (replace with actual API call) ---
+    try {
+        // ---> Replace this setTimeout with your actual fetch/axios call <--- 
+        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+        // ---> End of simulation <---
+
+        console.log('Data theoretically saved!', data);
+
+        // --- SUCCESS PATH --- 
+        // Hide the form and show success message + print controls
+        document.getElementById('success-repair-id').textContent = repairId;
+        repairForm.style.display = 'none';
+        document.getElementById('success-message').style.display = 'block';
+ 
+        const printCombinedBtn = document.getElementById('print-combined-btn');
+        const printControlsDiv = document.getElementById('print-controls');
+ 
+        // --- Manually Construct repairData Object (excluding unused fields) --- 
+        const repairData = {
+            repairId: repairId, // Generated ID
+            createdTimestamp: Date.now(), // Timestamp
+            status: 'Submitted', // Default status
+            
+            // Contact Info
+            returnName: formData.get('returnName') || '',
+            email: formData.get('email') || '',
+            phone: formData.get('phone') || '',
+            address: formData.get('address') || '',
+            address2: formData.get('address2') || '', // Include address2 if used
+            city: formData.get('city') || '',
+            state: formData.get('state') || '',
+            zipCode: formData.get('zipCode') || '',
+            
+            // Product Info
+            productType: formData.get('productType') || '',
+            product: formData.get('product') || '',
+            serialNumber: formData.get('serialNumber') || '',
+            purchaseDate: formData.get('purchaseDate') || '',
+            
+            // Issue Details
+            'selectedIssues[]': formData.getAll('selectedIssues[]'), // Use getAll for multiple values
+            issue: formData.get('issue') || '',
+            
+            // Replacement Approval (only if present in form)
+            replacementApproval: formData.get('replacementApproval') || null 
+        };
+
+        if (printCombinedBtn && printControlsDiv) { // Check for both button and container
+            printControlsDiv.style.display = 'block'; // Make the container visible
+            printCombinedBtn.style.display = 'inline-block'; // Show the combined button
+ 
+            // Attach combined print event listener
+            printCombinedBtn.addEventListener('click', () => {
+                const combinedHTML = generateCombinedPrintHTML(repairData);
+                triggerPrint(combinedHTML, 'Repair Documents - ' + repairData.repairId); // Use repairId from data
+            });
+        } else {
+            console.warn('Combined print button or container not found.');
+        }
+
+        // --- Save to Local Storage ---
+        try {
+            const existingRepairs = JSON.parse(localStorage.getItem('leupoldRepairs')) || [];
+            existingRepairs.push(repairData); // Push the already prepared repairData
+            localStorage.setItem('leupoldRepairs', JSON.stringify(existingRepairs));
+            console.log('Repair saved to localStorage:', repairData);
+        } catch (storageError) {
+            console.error('Error saving to localStorage:', storageError);
+            alert('There was an issue saving your repair request locally. Please try again or contact support.');
+        }
+
+        // Optional: Clear form fields if needed (might not be necessary if hiding the form)
+        // repairForm.reset(); 
+        // currentStep = 1; // Reset step counter if form were to be reused
+        // showStep(currentStep);
+
+        // --- Remove automatic redirect ---
+        // console.log('Repair request successful. Redirecting...');
+        // setTimeout(() => {
+        //     window.location.href = 'index.html'; // Redirect to the list page
+        // }, 3000); // Redirect after 3 seconds
+
+    } catch (error) {
+        // --- ERROR PATH ---
+        console.error('Submission failed:', error);
+        // Show an error message to the user (e.g., update successMessageDiv or add another div)
+        if (successMessageDiv) {
+            successMessageDiv.textContent = 'There was an error submitting your request. Please try again.';
+            successMessageDiv.classList.remove('success-message');
+            successMessageDiv.classList.add('error-message'); // Ensure you have styles for this
+            successMessageDiv.style.display = 'block';
+        }
+        // Re-enable submit button on error
+        if (submitButton) submitButton.disabled = false;
+    }
 }
 
 // --- Formatting Functions ---
@@ -714,7 +721,7 @@ function validatePhoneNumber(input = phoneInput, error = phoneError) {
         // If it's not strictly required, but has validation, we hide format errors when empty.
         hideValidationError(input, error);
         return true; // Or false depending on whether empty is valid in context, true assumes empty is okay for format
-    } else if (phoneDigits.length !== 10) {
+    } else if (phoneDigits.length !== 10) { // Check for 10 digits if not empty
         showValidationError(input, error, 'Please enter a 10-digit phone number');
         return false;
     } else {
@@ -739,7 +746,7 @@ function validateState(input = stateInput, error = stateError) {
 }
 
 function validateZipCode(input = zipCodeInput, error = zipCodeError) {
-    const pattern = /^\d{5}(-\d{4})?$/;
+    const pattern = /^\d{5}(-\d{4})?$/; // Allows 5 digits or 5+4 digits
     const isValid = pattern.test(input.value.trim());
     if (!isValid && input.value.trim() !== '') {
         showValidationError(input, error, 'Please enter a valid 5 or 5+4 digit zip code.');
@@ -795,3 +802,29 @@ repairForm?.addEventListener('input', (event) => {
         }
     }
 });
+
+// --- Event Listeners ---
+
+// Add listener to product type dropdown
+productTypeSelect?.addEventListener('change', toggleProductFields);
+
+// Add listener for form submission (now attached to the form itself)
+repairForm?.addEventListener('submit', submitForm); // Added: Listen for submit event on the form
+
+// Add listeners for multi-step navigation
+nextBtn?.addEventListener('click', handleNextOrSubmit); // Changed: Use the new handler
+prevBtn?.addEventListener('click', prevStep);
+cancelBtn?.addEventListener('click', cancelRepair); // Add listener for cancel button
+
+// --- Initial Page Load Logic ---
+
+// Run toggleProductFields on initial load to set up the form correctly
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        showStep(currentStep); // Show the first step initially
+        toggleProductFields(); // Still needed to set up product fields initially if step 2 loads first somehow or for direct access later
+    });
+} else {
+    showStep(currentStep); // Show the first step initially
+    toggleProductFields(); // Still needed
+}

@@ -192,12 +192,13 @@ textarea {
 }
 
 .success-message {
-    background-color: #DFF2BF;
-    color: #4F8A10;
-    padding: 10px;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #1A1A1A;           /* Dark text (same as gold button text) */
+    padding: 15px; /* Increased padding slightly */
     border-radius: 4px;
     margin-bottom: 20px;
     display: none; /* Hide by default */
+    border: 1px solid #C4A052; /* Add a subtle gold border */
 }
 
 /* Product Specific Issues Styling (From new-repair.html) */
@@ -245,3 +246,106 @@ input.is-invalid, select.is-invalid, textarea.is-invalid {
 .error-message.visible { /* Class to show error messages */
     display: block;
 }
+
+/* Force bullet points for repair details issues list */
+#detail-selectedIssues li {
+    list-style: disc !important; /* Force disc bullets */
+    display: list-item !important; /* Ensure display is correct for list item */
+    margin-left: 25px; /* Adjust indentation as needed */
+}
+
+/* --- Print Specific Styles --- */
+@media print {
+    body {
+        font-family: sans-serif;
+        margin: 20px !important; /* Use important to override other margin styles */
+        padding: 0 !important;
+        background-color: #fff !important; /* Ensure white background for printing */
+        font-size: 10pt; /* Adjust base font size for print if needed */
+    }
+
+    header, nav, footer, form#repair-form, .form-navigation, .print-buttons, .no-print, #progress-indicator {
+        display: none !important; /* Hide non-essential elements */
+    }
+
+    .content {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    h2, h3 {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 5px;
+        margin-top: 15px;
+        page-break-after: avoid; /* Try to keep headers with content */
+    }
+
+    /* Label specific styles */
+    .label-section {
+        border: 2px dashed #999;
+        padding: 15px;
+        margin-bottom: 20px;
+        page-break-inside: avoid; /* Try not to split the label across pages */
+    }
+    .address-block {
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+    .address-block strong {
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    /* Packing list specific styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        page-break-inside: auto; /* Allow tables to break */
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        text-align: left;
+        vertical-align: top;
+    }
+    th {
+        background-color: #eee;
+        font-weight: bold;
+    }
+    td:first-child {
+        width: 30%; /* Adjust width of label column */
+    }
+    
+    .barcode {
+        text-align: center;
+        margin-top: 20px;
+        page-break-inside: avoid; /* Keep barcode with its header */
+    }
+    .barcode svg {
+        height: 40px; /* Adjust barcode height for print */
+        width: auto;
+        max-width: 80%; /* Ensure barcode fits */
+    }
+    
+    /* Ensure print content is visible */
+    #success-message, #print-controls {
+        display: none !important; /* Ensure these are also hidden */
+    }
+
+    /* Display only the content intended for print (if wrapped in a specific div) */
+    /* Example: if print content is dynamically put into a div with id="print-area" */
+    /* 
+    body > *:not(#print-area) { 
+        display: none; 
+    }
+    #print-area {
+        display: block !important;
+    }
+    */
+}
+/* --- End Print Styles --- */
