@@ -49,13 +49,13 @@ function loadRepairs() {
             const displayStatus = repair.status || 'Submitted'; // Default status
 
             row.innerHTML = `
-                <td>${displayId}</td>
-                <td>${repair.product || 'N/A'}</td>
-                <td>${displaySerial}</td>
-                <td>${displayIssue}</td>
-                <td>${displayDate}</td>
-                <td class="${statusClass}">${displayStatus}</td>
-                <td class="actions no-print"> 
+                <td data-label="Request ID">${displayId}</td>
+                <td data-label="Product">${repair.product || 'N/A'}</td>
+                <td data-label="Serial Number">${displaySerial}</td>
+                <td data-label="Issue">${displayIssue}</td>
+                <td data-label="Date Submitted">${displayDate}</td>
+                <td data-label="Status" class="${statusClass}">${displayStatus}</td>
+                <td data-label="Print" class="actions no-print"> 
                     <button class="btn-print-combined" data-repair-id="${displayId}" title="Print Shipping Label">Shipping Label</button>
                 </td>
             `;

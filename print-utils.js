@@ -35,6 +35,10 @@ function triggerPrint(htmlContent, title) {
             th, td { border: 1px solid #ccc; padding: 6px; text-align: left; vertical-align: top; }
             th { background-color: #eee; font-weight: bold; }
             td:first-child { width: 30%; } /* Packing list label width */
+            table td:nth-child(2) {
+                white-space: normal; 
+                word-break: break-word;
+            }
             .page-break { page-break-after: always; } /* Added for combined printing */
             .no-print { display: none; } 
         }

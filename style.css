@@ -116,6 +116,14 @@ tbody tr { /* From index.html */
     cursor: pointer;
 }
 
+/* Style for the Issue column to wrap text */
+#repairs-table tbody tr td:nth-child(4) {
+    white-space: normal; /* Allow wrapping */
+    word-break: break-word; /* Break long words */
+    min-width: 150px; /* Optional: Set a minimum width */
+    max-width: 300px; /* Optional: Set a maximum width */
+}
+
 /* Status Indicators (From index.html) */
 .status-pending {
     color: #FF9800;
@@ -254,6 +262,63 @@ input.is-invalid, select.is-invalid, textarea.is-invalid {
     margin-left: 25px; /* Adjust indentation as needed */
 }
 
+/* Responsive Table Styles */
+@media (max-width: 768px) {
+    #repairs-table thead {
+        display: none; /* Hide table headers on small screens */
+    }
+
+    #repairs-table, #repairs-table tbody, #repairs-table tr, #repairs-table td {
+        display: block;
+        width: 100%;
+    }
+
+    #repairs-table tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd; /* Add border around each "row" block */
+        border-radius: 4px;
+    }
+
+    #repairs-table td {
+        padding-left: 45%; /* Slightly reduce padding */
+        padding-right: 10px; /* Add some right padding */
+        position: relative;
+        border: none; /* Remove individual cell borders */
+        border-bottom: 1px solid #eee; /* Add subtle separator */
+        min-height: 1.5em; /* Ensure minimum height for visibility */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+
+    #repairs-table td:last-child {
+        border-bottom: 0; /* Remove border for the last cell in a block */
+    }
+
+    #repairs-table td::before {
+        content: attr(data-label); /* Use data-label for the label */
+        position: absolute;
+        left: 10px;
+        width: calc(45% - 20px); /* Adjust width to match padding */
+        padding-right: 10px;
+        font-weight: bold;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    /* Adjust specific columns if needed */
+    #repairs-table td[data-label="Print"] {
+       text-align: center; /* Center the print button */
+       padding-left: 10px; /* Remove extra padding */
+    }
+    #repairs-table td[data-label="Print"]::before {
+       display: none; /* Hide label for print button */
+    }
+    #repairs-table td[data-label="Print"] button {
+        width: auto; /* Allow button to size naturally */
+        padding: 5px 10px;
+        font-size: 0.9em;
+    }
+}
+
 /* --- Print Specific Styles --- */
 @media print {
     body {
@@ -264,7 +329,7 @@ input.is-invalid, select.is-invalid, textarea.is-invalid {
         font-size: 10pt; /* Adjust base font size for print if needed */
     }
 
-    header, nav, footer, form#repair-form, .form-navigation, .print-buttons, .no-print, #progress-indicator {
+    header, nav, footer, form#repair-form, .form-navigation, .print-buttons, #progress-indicator {
         display: none !important; /* Hide non-essential elements */
     }
 

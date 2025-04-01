@@ -140,8 +140,9 @@ function toggleProductFields() {
 
 // Generates a unique-ish ID for the repair request
 function generateRepairId() {
-    // R- + timestamp last 6 digits + random hex string
-    return 'R-' + Date.now().toString().slice(-6) + Math.random().toString(16).substring(2, 8);
+    // R- + random digits (no leading zeros)
+    const randomNumber = Math.floor(Math.random() * 10000000); // 0 to 9,999,999
+    return 'R-' + randomNumber.toString(); // Use number directly, no padding
 }
 
 // Shows a validation error for a specific field
